@@ -30,7 +30,7 @@ if __name__ == "__main__":
         dim_out=1,
         n_hidden_layers=5,
         final_activation=nn.Sigmoid(),
-        w_0_initial=30.0,
+        w0=30.0,
         device=torch.device("cuda"),
         n_epochs=100,
         lr=1e-2,

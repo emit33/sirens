@@ -9,11 +9,11 @@ def train_net(
     dim_hidden=256,
     dim_out=1,
     n_hidden_layers=5,
-    final_activation=nn.Sigmoid(),
-    w_0_initial=30.0,
-    device=torch.device("cuda"),
+    w0=30.0,
     n_epochs=100,
     lr=1e-2,
+    final_activation=nn.Sigmoid(),
+    device=torch.device("cuda"),
 ):
     net = SirenNet(
         dim_in=dim_in,  # input dimension, ex. 2d coor
@@ -21,7 +21,7 @@ def train_net(
         dim_out=dim_out,  # output dimension, ex. rgb value
         n_hidden_layers=n_hidden_layers,  # number of layers
         final_activation=final_activation,  # activation of final layer (nn.Identity() for direct output)
-        w_0_initial=w_0_initial,  # different signals may require different omega_0 in the first layer - this is a hyperparameter
+        w_0_initial=w0,  # different signals may require different omega_0 in the first layer - this is a hyperparameter
     )
     net.to(device)
 
