@@ -13,8 +13,7 @@ lr = 0.01
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load and preprocess image
-img = cv2.imread("images/triangle1.png")
-img = img[:, :, 0:1]  # Make grayscale; keep final dim
+img = cv2.imread("triangles/triangle1.png")
 img = (img - img.min()) / (img.max() - img.min())  # Normalise
 img = img.transpose(2, 1, 0)
 img = torch.from_numpy(img).float()
@@ -32,7 +31,7 @@ net = SirenNet(
 )
 net.to(device)
 
-wrapper = SirenWrapper(net, image_width=480, image_height=640)
+wrapper = SirenWrapper(net, image_width=256, image_height=256)
 wrapper.to(device)
 
 optimizer = torch.optim.Adam(wrapper.parameters(), lr=lr)
