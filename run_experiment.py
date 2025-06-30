@@ -3,7 +3,9 @@ from utils.config import Config
 
 if __name__ == "__main__":
     # Obtain config
-    config = Config.from_yaml("/home/tempus/projects/sirens/config_testing.yaml")
+    config = Config.from_yaml(
+        "/home/tempus/projects/siren_analysis/siren_experiments/01_10_triangles/config_testing.yaml"
+    )
 
     # Encode directory
     encode_dir(config.model, config.training, config.paths)

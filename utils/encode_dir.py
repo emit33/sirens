@@ -32,7 +32,7 @@ def encode_dir(
 
     for img_path in img_paths:
         img = load_and_preprocess_img(img_path, training_config.resolution)
-        img.to(device)
+        img = img.to(device)
 
         reconstructed_img, net, losses = train_net(
             img,
@@ -52,4 +52,4 @@ def encode_dir(
         plt.savefig(reconstructed_imgs_dir / img_path.name)
 
         # Save model
-        torch.save(net, ckpts_dir)
+        torch.save(net.state_dict(), ckpts_dir / f"{img_path.stem}.pt")
