@@ -31,7 +31,7 @@ def encode_dir(
     os.makedirs(ckpts_dir)
 
     for img_path in img_paths:
-        img = load_and_preprocess_img(img_path)
+        img = load_and_preprocess_img(img_path, training_config.resolution)
         img.to(device)
 
         reconstructed_img, net, losses = train_net(

@@ -10,7 +10,7 @@ from utils.train import train_net
 
 if __name__ == "__main__":
     # Parameter set up
-    img_path = "/home/tempus/projects/sirens/triangles/triangle1.png"
+    img_path = "/home/tempus/projects/data/triangles/triangle1.png"
     n_epochs = 100
     lr = 0.01
 
@@ -21,7 +21,8 @@ if __name__ == "__main__":
     # ------------------ #
     # Run script
     # Load and preprocess image
-    img = load_and_preprocess_img(img_path)
+    img = load_and_preprocess_img(img_path, 256)
+    img = img.to("cuda")
 
     reconstructed_img, net, losses = train_net(
         img,
