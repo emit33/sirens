@@ -13,6 +13,7 @@ def train_net(
     n_epochs=100,
     lr=1e-2,
     final_activation=nn.Sigmoid(),
+    grayscale_flag=True,
     device=torch.device("cuda"),
 ):
     net = SirenNet(
@@ -25,7 +26,12 @@ def train_net(
     )
     net.to(device)
 
-    wrapper = SirenWrapper(net, image_width=256, image_height=256)
+    wrapper = SirenWrapper(
+        net,
+        image_width=img.shape[-1],
+        image_height=img.shape[-1],
+        grayscale_flag=grayscale_flag,
+    )
     wrapper.to(device)
 
     optimizer = torch.optim.Adam(wrapper.parameters(), lr=lr)
@@ -44,6 +50,11 @@ def train_net(
 
     reconstructed_img = wrapper()
 
-    reconstructed_img = reconstructed_img[0].permute(2, 1, 0).cpu().detach().numpy()
+    if grayscale_flag:
+        # [B,H,W] -> [B,C,H,W] add color channel
+        reconstructed_img = reconstructed_img.unsqueeze(1).repeat(1, 3, 1, 1)
+
+    # [B,C,H,W] -> [H,W,C]
+    reconstructed_img = reconstructed_img[0].permute(1, 2, 0).cpu().detach().numpy()
 
     return reconstructed_img, net, losses

@@ -3,7 +3,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-import cv2
 
 
 class Sine(nn.Module):
@@ -122,11 +121,12 @@ class SirenNet(nn.Module):
 
 
 class SirenWrapper(nn.Module):
-    def __init__(self, siren_net, image_width, image_height):
+    def __init__(self, siren_net, image_width, image_height, grayscale_flag):
         super().__init__()
         self.siren_net = siren_net
         self.image_width = image_width
         self.image_height = image_height
+        self.grayscale_flag = grayscale_flag
 
         tensors = [
             torch.linspace(-1, 1, steps=image_height),
@@ -141,9 +141,16 @@ class SirenWrapper(nn.Module):
     def forward(self, img=None):
         coords = self.grid.clone().detach().requires_grad_()
         out = self.siren_net(coords)
-        out = rearrange(
-            out, "(h w) c -> () c h w", h=self.image_height, w=self.image_width
-        )
+
+        if self.grayscale_flag:
+            out = out.squeeze()  # remove singleton channel
+            out = rearrange(
+                out, "(h w) -> () h w", h=self.image_height, w=self.image_width
+            )
+        else:
+            out = rearrange(
+                out, "(h w) c -> () c h w", h=self.image_height, w=self.image_width
+            )
 
         if img is not None:
             loss = F.mse_loss(out, img)

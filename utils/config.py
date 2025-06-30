@@ -23,6 +23,7 @@ class TrainingConfig:
     n_epochs: int = 100
     lr: float = 0.01
     resolution: int = 256
+    grayscale: bool = True
 
 
 @dataclass
